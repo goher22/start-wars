@@ -19,7 +19,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item, index) in getlist_starships" :key="index">
+                    <tr v-if="this.load">
+                        <td class="text-center mb-3" colspan="4">
+                            <v-subheader class="text-center">Cargando...</v-subheader>
+                            <v-progress-linear indeterminate></v-progress-linear>
+                        </td>
+                    </tr>
+                    <tr v-else v-for="(item, index) in getlist_starships" :key="index">
                         <td>{{item.name}}</td>
                         <td>{{item.model}}</td>
                         <td>{{item.manufacturer}}</td>
@@ -29,13 +35,13 @@
             </template>
         </v-simple-table>
         <v-btn-toggle>
-            <v-btn :disabled="(this.getprevious_starships==null)">
+            <v-btn :disabled="(this.getprevious_starships==null && !this.load)" v-on:click="load_data(getprevious_starships, -1)">
                 <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
             <v-btn>
                 <v-icon>{{count}}</v-icon>
             </v-btn>
-            <v-btn :disabled="(this.getnext_starships==null)" v-on:click="next_starships">
+            <v-btn :disabled="(this.getnext_starships==null && !this.load)" v-on:click="load_data(getnext_starships, 1)">
                 <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
         </v-btn-toggle>
@@ -47,7 +53,8 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
     data () {
         return {
-            count: 1
+            count: 1,
+            load: false
         }
     },
     computed: {
@@ -55,17 +62,17 @@ export default {
     },
     methods: {
         ...mapActions('setstarships', ['load_starships']),
-        next_starships(){
-            this.count++
-            this.load_starships(this.getnext_starships)
-        },
-        previous_starships(){
-            this.count--
-            this.load_starships(this.getprevious_starships)
+        load_data(url_api, count = 0){
+            if(!this.load){            
+                this.load = true
+                this.count += count
+                this.load_starships(url_api).finally(() => this.load = false)
+            }
         }
+        
     },
     mounted () {
-        this.load_starships(process.env.VUE_APP_URL_API+'/starships')
+        this.load_data(process.env.VUE_APP_URL_API+'/starships')
     }
 }
 </script>

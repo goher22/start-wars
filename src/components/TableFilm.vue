@@ -19,7 +19,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item, index) in getlist_films" :key="index">
+                    <tr v-if="this.load">
+                        <td class="text-center" colspan="4">
+                            <v-subheader class="text-center">Cargando...</v-subheader>
+                            <v-progress-linear indeterminate></v-progress-linear>
+                        </td>
+                    </tr>
+                    <tr v-else v-for="(item, index) in getlist_films" :key="index">
                         <td>{{item.title}}</td>
                         <td>{{item.director}}</td>
                         <td>{{item.producer}}</td>
@@ -29,13 +35,13 @@
             </template>
         </v-simple-table>
         <v-btn-toggle>
-            <v-btn :disabled="(this.getprevious_films==null)">
+            <v-btn :disabled="this.getprevious_films==null" v-on:click="load_data(getprevious_films, -1)">
                 <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
             <v-btn>
                 <v-icon>{{count}}</v-icon>
             </v-btn>
-            <v-btn :disabled="(this.getnext_films==null)">
+            <v-btn :disabled="this.getnext_films==null" v-on:click="load_data(getnext_films, 1)">
                 <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
         </v-btn-toggle>
@@ -47,17 +53,25 @@ import { mapActions, mapGetters } from 'vuex'
 export default {
     data () {
         return {
-            count: 1
+            count: 1,
+            load: false
         }
     },
     computed: {
         ...mapGetters('films', ['getlist_films', 'getnext_films', 'getprevious_films'])
     },
     methods: {
-        ...mapActions('films', ['load_films'])
+        ...mapActions('films', ['load_films']),
+        load_data(url_api, count = 0){
+            if(!this.load){  
+                this.load = true
+                this.count += count 
+                this.load_films(url_api).finally(()=> this.load = false)
+            }
+        }
     },
     mounted () {
-        this.load_films(process.env.VUE_APP_URL_API+'/films')
+        this.load_data(process.env.VUE_APP_URL_API+'/films')
     }
 }
 </script>
