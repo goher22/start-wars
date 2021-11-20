@@ -2,9 +2,7 @@
   <v-app id="app">
     <AppBar></AppBar>
     <v-main>
-      <v-container>
-        <router-view/>
-      </v-container>
+      <router-view/>
     </v-main>
   </v-app>
 </template>
