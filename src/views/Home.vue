@@ -8,7 +8,7 @@
     <v-tabs-items v-model="tab">
       <v-tab-item><TableFlim></TableFlim></v-tab-item>
       <v-tab-item><TableStarships></TableStarships></v-tab-item>
-      <v-tab-item>item 3</v-tab-item>
+      <v-tab-item><TableVehicles></TableVehicles></v-tab-item>
     </v-tabs-items>
   </v-container>
 </template>
@@ -16,10 +16,12 @@
 <script>
 import TableFlim from '@/components/TableFilm.vue'
 import TableStarships from '@/components/TableStarships.vue'
+import TableVehicles from '@/components/TableVehicles.vue'
 export default {
   components: {
     TableFlim,
-    TableStarships
+    TableStarships,
+    TableVehicles
   },
   data () {
     return {

@@ -25,7 +25,7 @@
                             <v-progress-linear indeterminate></v-progress-linear>
                         </td>
                     </tr>
-                    <tr v-else v-for="(item, index) in getlist_starships" :key="index">
+                    <tr v-else v-for="(item, index) in getlist_vehicle" :key="index">
                         <td>{{item.name}}</td>
                         <td>{{item.model}}</td>
                         <td>{{item.manufacturer}}</td>
@@ -35,13 +35,13 @@
             </template>
         </v-simple-table>
         <v-btn-toggle>
-            <v-btn :disabled="(this.getprevious_starships==null && !this.load)" v-on:click="load_data(getprevious_starships, -1)">
+            <v-btn :disabled="(this.getprevious_vehicle==null && !this.load)" v-on:click="load_data(getprevious_vehicle, -1)">
                 <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
             <v-btn>
                 <v-icon>{{count}}</v-icon>
             </v-btn>
-            <v-btn :disabled="(this.getnext_starships==null && !this.load)" v-on:click="load_data(getnext_starships, 1)">
+            <v-btn :disabled="(this.getnext_vehicle==null && !this.load)" v-on:click="load_data(getnext_vehicle, 1)">
                 <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
         </v-btn-toggle>
@@ -58,21 +58,21 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('starships', ['getlist_starships', 'getnext_starships', 'getprevious_starships'])
+        ...mapGetters('vehicles', ['getlist_vehicle', 'getnext_vehicle', 'getprevious_vehicle'])
     },
     methods: {
-        ...mapActions('starships', ['load_starships']),
+        ...mapActions('vehicles', ['load_vehicles']),
         load_data(url_api, count = 0){
             if(!this.load){            
                 this.load = true
                 this.count += count
-                this.load_starships(url_api).finally(() => this.load = false)
+                this.load_vehicles(url_api).finally(() => this.load = false)
             }
         }
         
     },
     mounted () {
-        this.load_data(process.env.VUE_APP_URL_API+'/starships')
+        this.load_data(process.env.VUE_APP_URL_API+'/vehicles')
     }
 }
 </script>
