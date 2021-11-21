@@ -14,7 +14,8 @@ export default {
                     title: e.title,
                     director: e.director,
                     producer: e.producer,
-                    releaseDate: e.release_date
+                    releaseDate: e.release_date,
+                    peoples: e.characters
                 }
             })
         },

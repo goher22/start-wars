@@ -16,11 +16,14 @@
                         <th class="text-center">
                             fecha de lanzamiento
                         </th>
+                        <th>
+                            Actores
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr v-if="this.load">
-                        <td class="text-center" colspan="4">
+                        <td class="text-center" colspan="5">
                             <v-subheader class="text-center">Cargando...</v-subheader>
                             <v-progress-linear indeterminate></v-progress-linear>
                         </td>
@@ -30,6 +33,7 @@
                         <td>{{item.director}}</td>
                         <td>{{item.producer}}</td>
                         <td>{{item.releaseDate}}</td>
+                        <td><DialogsPeople :peoples='item.peoples'></DialogsPeople></td>
                     </tr>
                 </tbody>
             </template>
@@ -50,7 +54,11 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import DialogsPeople from '@/components/DialogsPeople.vue'
 export default {
+    components: {
+        DialogsPeople
+    },
     data () {
         return {
             count: 1,
